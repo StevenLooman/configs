@@ -14,6 +14,7 @@ au BufRead,BufNewFile *.c,*.h set autoindent
 au BufRead,BufNewFile *.c,*.h match BadWhitespace /^\t\+/
 au BufRead,BufNewFile *.c,*.h match BadWhitespace /\s\+$/
 au         BufNewFile *.c,*.h set fileformat=unix
+au BufRead,BufNewFile *.c,*.h let b:comment_leader = '/* '
 
 " Java
 au BufRead,BufNewFile *.java set expandtab
@@ -23,6 +24,7 @@ au BufRead,BufNewFile *.java set autoindent
 au BufRead,BufNewFile *.java match BadWhitespace /^\t\+/
 au BufRead,BufNewFile *.java match BadWhitespace /\s\+$/
 au         BufNewFile *.java set fileformat=unix
+au BufRead,BufNewFile *.java let b:comment_leader = '//'
 
 " Python
 au BufRead,BufNewFile *.py,*.pyw set expandtab
@@ -34,6 +36,7 @@ au BufRead,BufNewFile *.py,*.pyw set autoindent
 au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
 au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /\s\+$/
 au         BufNewFile *.py,*.pyw set fileformat=unix
+au BufRead,BufNewFile *.py,*.pyw let b:comment_leader = '#'
 let python_highlight_all=1
 let g:pydiction_location = '~/.vim/pydiction-1.2/complete-dict'
 
@@ -46,9 +49,14 @@ au BufRead,BufNewFile *.js set autoindent
 au BufRead,BufNewFile *.js match BadWhitespace /^\t\+/
 au BufRead,BufNewFile *.js match BadWhitespace /\s\+$/
 au         BufNewFile *.js set fileformat=unix
+au BufRead,BufNewFile *.js let b:comment_leader = '//'
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 
 
 " Makefile
 au BufRead,BufNewFile Makefile* set noexpandtab
 
+
+" key mappings
+noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> ,cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
