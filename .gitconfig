@@ -1,3 +1,6 @@
 [user]
 	name = Steven Looman
 	email = steven.looman@gmail.com
+
+[color]
+	ui = true
