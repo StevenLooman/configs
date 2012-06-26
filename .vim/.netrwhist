@@ -1,5 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/Users/Steven/src/geo/mongo_geo/prototype1/frontend/mongeo/lib'
-let g:netrw_dirhist_2='/Users/Steven/src/geo/mongo_geo/prototype1/frontend/mongeo/lib/hash'
-let g:netrw_dirhist_3='/Users/Steven/.vim'
