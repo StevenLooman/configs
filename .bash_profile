@@ -52,9 +52,9 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 export MONO_MWF_MAC_FORCE_X11=true
 export LC_ALL="en_GB"
-export SONAR_RUNNER_HOME=${HOME}/src/sonar/sonar-runner-1.0
-export ANDROID_SDK_HOME=${HOME}/src/android-sdk-mac_x86
-export PATH=$PATH:${SONAR_RUNNER_HOME}/tools:${SONAR_RUNNER_HOME}/bin
+export SONAR_RUNNER_HOME=${HOME}/opt/sonar-runner-1.3
+export ANDROID_SDK_HOME=${HOME}/src/android/android-sdk-mac_x86
+export PATH=$PATH:${SONAR_RUNNER_HOME}/bin
 
 export EDITOR=vim
 export PAGER=less
