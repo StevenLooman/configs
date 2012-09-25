@@ -95,7 +95,12 @@ alias du='du -h'
 # alias grep='grep --color'                     # show differences in colour
 
 # Some shortcuts for different directory listings
-alias ls='ls -hG'                               # classify files in colour
+if [ "`uname`x" == "Linuxx" ]; then
+	alias ls='ls -h --color'                # classify files in colour
+fi
+if [ "`uname`x" == "Darwinx" ]; then
+	alias ls='ls -hG'                       # classify files in colour
+fi
 # alias dir='ls --color=auto --format=vertical'
 # alias vdir='ls --color=auto --format=long'
 alias ll='ls -l'                              # long list
