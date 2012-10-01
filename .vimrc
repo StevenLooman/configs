@@ -26,12 +26,12 @@ au BufRead,BufNewFile *.java match BadWhitespace /\s\+$/
 au         BufNewFile *.java set fileformat=unix
 au BufRead,BufNewFile *.java let b:comment_leader = '//'
 
-" Python
+" Python, PEP-008
 au BufRead,BufNewFile *.py,*.pyw set expandtab
 "au BufRead,BufNewFile *.py,*.pyw set textwidth=79
-au BufRead,BufNewFile *.py,*.pyw set tabstop=8
-au BufRead,BufNewFile *.py,*.pyw set softtabstop=8
-au BufRead,BufNewFile *.py,*.pyw set shiftwidth=8
+au BufRead,BufNewFile *.py,*.pyw set tabstop=4
+au BufRead,BufNewFile *.py,*.pyw set softtabstop=4
+au BufRead,BufNewFile *.py,*.pyw set shiftwidth=4
 au BufRead,BufNewFile *.py,*.pyw set autoindent
 au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
 au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /\s\+$/
