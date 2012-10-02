@@ -5,6 +5,7 @@ set autoindent
 filetype plugin on
 filetype indent on
 highlight BadWhitespace ctermbg=red guibg=red
+set hlsearch
 
 " C
 au BufRead,BufNewFile *.c,*.h set expandtab
