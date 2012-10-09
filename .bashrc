@@ -103,7 +103,7 @@ if [ "`uname`x" == "Darwinx" ]; then
 fi
 # alias dir='ls --color=auto --format=vertical'
 # alias vdir='ls --color=auto --format=long'
-alias ll='ls -l'                              # long list
+alias ll='ls -l -a'                           # long list
 alias la='ls -A'                              # all but . and ..
 alias l='ls -CF'                              #
 
