@@ -1,6 +1,11 @@
 [user]
 	name = Steven Looman
 	email = steven.looman@gmail.com
-
+[core]
+	excludesfile = /Users/Steven/.gitignore_global
 [color]
 	ui = true
+[credential]
+	helper = osxkeychain
+[branch]
+	autosetuprebase = always
