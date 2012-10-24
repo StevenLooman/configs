@@ -68,9 +68,29 @@ au         BufNewFile *.xml set fileformat=unix
 au BufRead,BufNewFile *.xml let b:comment_leader = '<!--'
 au BufRead,BufNewFile *.xml let b:comment_trailer = '-->'
 
-" Zope/Plone
-au BufNewFile,BufRead *.zcml set filetype=xml
-au BufNewFile,BufRead *.pt   set filetype=xml
+" ZCML
+au BufRead,BufNewFile *.zcml set expandtab
+au BufRead,BufNewFile *.zcml set tabstop=4
+au BufRead,BufNewFile *.zcml set softtabstop=4
+au BufRead,BufNewFile *.zcml set shiftwidth=4
+au BufRead,BufNewFile *.zcml set autoindent
+au BufRead,BufNewFile *.zcml match BadWhitespace /^\t\+/
+au BufRead,BufNewFile *.zcml match BadWhitespace /\s\+$/
+au         BufNewFile *.zcml set fileformat=unix
+au BufRead,BufNewFile *.zcml let b:comment_leader = '<!--'
+au BufRead,BufNewFile *.zcml let b:comment_trailer = '-->'
+
+" PT
+au BufRead,BufNewFile *.pt set expandtab
+au BufRead,BufNewFile *.pt set tabstop=4
+au BufRead,BufNewFile *.pt set softtabstop=4
+au BufRead,BufNewFile *.pt set shiftwidth=4
+au BufRead,BufNewFile *.pt set autoindent
+au BufRead,BufNewFile *.pt match BadWhitespace /^\t\+/
+au BufRead,BufNewFile *.pt match BadWhitespace /\s\+$/
+au         BufNewFile *.pt set fileformat=unix
+au BufRead,BufNewFile *.pt let b:comment_leader = '<!--'
+au BufRead,BufNewFile *.pt let b:comment_trailer = '-->'
 
 
 " key mappings
