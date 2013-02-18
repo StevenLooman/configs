@@ -50,8 +50,13 @@ PS1="[\u \w]\\$ "
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 # Finished adapting your PATH environment variable for use with MacPorts.
 
+
+# locales
+export LC_ALL=en_US.UTF-8  
+export LANG=en_US.UTF-8
+
+
 export MONO_MWF_MAC_FORCE_X11=true
-export LC_ALL="en_GB"
 export SONAR_RUNNER_HOME=${HOME}/opt/sonar-runner-1.3
 export ANDROID_SDK_HOME=${HOME}/src/android/android-sdk-mac_x86
 export PATH=$PATH:${SONAR_RUNNER_HOME}/bin
