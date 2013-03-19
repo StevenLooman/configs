@@ -39,7 +39,7 @@ if [ -d "${HOME}/info" ]; then
   INFOPATH=${HOME}/info:${INFOPATH}
 fi
 
-PS1="[\u \w]\\$ "
+PS1="[\u@\h \w]\\$ "
 
 
 ##
@@ -52,7 +52,7 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 
 # locales
-export LC_ALL=en_US.UTF-8  
+export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 
