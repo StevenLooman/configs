@@ -1,3 +1,7 @@
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-sensible'
+call plug#end()
+
 set encoding=utf-8
 set bg=dark
 syntax on
@@ -29,7 +33,7 @@ au BufRead,BufNewFile *.java let b:comment_leader = '//'
 
 " Python, PEP-008
 au BufRead,BufNewFile *.py,*.pyw set expandtab
-au BufRead,BufNewFile *.py,*.pyw set textwidth=79
+au BufRead,BufNewFile *.py,*.pyw set textwidth=139
 au BufRead,BufNewFile *.py,*.pyw set tabstop=4
 au BufRead,BufNewFile *.py,*.pyw set softtabstop=4
 au BufRead,BufNewFile *.py,*.pyw set shiftwidth=4
@@ -64,29 +68,17 @@ au BufRead,BufNewFile *.xml match BadWhitespace /\s\+$/
 au         BufNewFile *.xml set fileformat=unix
 au BufRead,BufNewFile *.xml let b:comment_leader = '<!--'
 
-" ZCML
-au BufRead,BufNewFile *.zcml set filetype=xml
-au BufRead,BufNewFile *.zcml set expandtab
-au BufRead,BufNewFile *.zcml set tabstop=4
-au BufRead,BufNewFile *.zcml set softtabstop=4
-au BufRead,BufNewFile *.zcml set shiftwidth=4
-au BufRead,BufNewFile *.zcml set autoindent
-au BufRead,BufNewFile *.zcml match BadWhitespace /^\t\+/
-au BufRead,BufNewFile *.zcml match BadWhitespace /\s\+$/
-au         BufNewFile *.zcml set fileformat=unix
-au BufRead,BufNewFile *.zcml let b:comment_leader = '<!--'
-
-" PT
-au BufRead,BufNewFile *.pt set filetype=xml
-au BufRead,BufNewFile *.pt set expandtab
-au BufRead,BufNewFile *.pt set tabstop=4
-au BufRead,BufNewFile *.pt set softtabstop=4
-au BufRead,BufNewFile *.pt set shiftwidth=4
-au BufRead,BufNewFile *.pt set autoindent
-au BufRead,BufNewFile *.pt match BadWhitespace /^\t\+/
-au BufRead,BufNewFile *.pt match BadWhitespace /\s\+$/
-au         BufNewFile *.pt set fileformat=unix
-au BufRead,BufNewFile *.pt let b:comment_leader = '<!--'
+" HTML
+au BufRead,BufNewFile *.html set filetype=xml
+au BufRead,BufNewFile *.html set expandtab
+au BufRead,BufNewFile *.html set tabstop=4
+au BufRead,BufNewFile *.html set softtabstop=4
+au BufRead,BufNewFile *.html set shiftwidth=4
+au BufRead,BufNewFile *.html set autoindent
+au BufRead,BufNewFile *.html match BadWhitespace /^\t\+/
+au BufRead,BufNewFile *.html match BadWhitespace /\s\+$/
+au         BufNewFile *.html set fileformat=unix
+au BufRead,BufNewFile *.html let b:comment_leader = '<!--'
 
 
 " key mappings
