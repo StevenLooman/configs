@@ -11,6 +11,11 @@ filetype indent on
 highlight BadWhitespace ctermbg=red guibg=red
 set hlsearch
 
+" no temp or backup files
+set noswapfile
+set nobackup
+set nowritebackup
+
 " C
 au BufRead,BufNewFile *.c,*.h set expandtab
 au BufRead,BufNewFile *.c,*.h set tabstop=4
