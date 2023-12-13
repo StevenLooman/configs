@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language: Smallworld Magik
 " Maintainer: Steven Looman
-" Latest Revision: 24 March 2018
+" Latest Revision: 13 December 2023
 " From: http://vim.wikia.com/wiki/Creating_your_own_syntax_files
 
 if exists("b:current_syntax")
@@ -25,6 +25,7 @@ syn keyword magikKeyword _lock _endlock
 syn keyword magikKeyword _proc _endproc
 syn keyword magikKeyword _if _then _elif _else _endif
 syn keyword magikKeyword _for _over
+syn keyword magikKeyword _while
 syn keyword magikKeyword _loop _endloop _loopbody
 syn keyword magikKeyword _continue _leave _return
 syn keyword magikKeyword _local _constant _recursive
@@ -44,19 +45,18 @@ syn keyword magikKeyword _unset _true _false _maybe
 
 " Blocks
 syn region magikBlockBlock start="_block" end="_endblock" fold transparent
-syn region magikProtectBlock start="_protect" end="_protection" fold transparent
-syn region magikProtectionBlock start="_protection" end="_endprotect" fold transparent
-syn region magikProtectionBlock start="_catch" end="_endcatch" fold transparent
-syn region magikTryBlock start="_try" end="_when" fold transparent
-syn region magikIFBlock start="_if" end="_endif" fold transparent
+syn region magikProtectBlock start="_protect" end="_endprotect" fold transparent
+syn region magikTryBlock start="_try" end="_endtry" fold transparent
+syn region magikIfBlock start="_if" end="_endif" fold transparent
 syn region magikLoopBlock start="_loop" end="_endloop" fold transparent
-syn region magikProtectionBlock start="_lock" end="_endlock" fold transparent
+syn region magikLockBlock start="_lock" end="_endlock" fold transparent
 syn region magikMethodBlock start="_method" end="_endmethod" fold transparent
 syn region magikProcBlock start="_proc" end="_endproc" fold transparent
 
 " Strings/numbers/...
 syn region magikString start='"' end='"'
-syn match magikSymbol ':[a-zA-Z_]+'
+syn region magikString start="'" end="'"
+syn match magikSymbol ':[0-9a-zA-Z_]+'
 syn match magikNumber '\d\+'
 syn match magikNumber '[-+]\d\+'
 syn match magikNumber '\d\+\.\d*'
