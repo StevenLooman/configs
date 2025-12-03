@@ -1,0 +1,244 @@
+#% text_encoding = utf8
+
+_package user
+
+_pragma(classify_level=basic, topic={rs})
+_global bap <<
+    _proc @bap(str)
+        ## Better apropos.
+        ## @param {sw:char16_vector} str The string to match global names against.
+        # mlint: disable=warned-call
+        _local sorted_packages <<
+            sw:sorted_collection.new_from(sw:package.all_packages, {:method_result, :name})
+        _for pkg _over sorted_packages.fast_elements() # iter-type: sw:package
+        _loop
+            _local pkg_name << pkg.name
+            _local matches << sorted_collection.new()
+            _for global_name, thing _over pkg.fast_keys_and_elements(_true)
+            _loop
+                _if global_name.write_string.matches?("*" + str + "*")
+                _then
+                    matches.add(global_name)
+                _endif
+            _endloop
+
+            _for match _over matches.fast_elements()
+            _loop
+                _local thing << pkg[match]
+                write(pkg_name, ":", match, " : ", thing)
+            _endloop
+        _endloop
+    _endproc
+$
+
+_pragma(classify_level=basic, topic={rs})
+_method object.bap(str, _optional local_only?, including_private?)
+    ## Better apropos.
+    ## @param {sw:char16_vector} str The string to match method names against.
+    ## @param {sw:false} local_only? Whether to include only methods defined on the object's class. Default is _false.
+    ## @param {sw:false} including_private? Whether to include private methods. Default is _false.
+    # mlint: disable=forbidden-call
+    # Gather methods matching str.
+    _local regex << sw:sw_regexp.new(str)
+
+    _local method_table << _self.define_method_target
+    _local methods << sw:sorted_collection.new(_unset, {:method_result, :name})
+    _for method _over method_table.elements()
+    _loop
+        # Including private methods?
+        _if including_private? _isnt _true _andif
+            method.private?
+        _then
+            _continue
+        _endif
+
+        # Local methods only?
+        _if local_only? _is _true _andif
+            method.owner _isnt method_table
+        _then
+            _continue
+        _endif
+
+        _local method_name << method.name.write_string
+        _if regex.find(method_name) _isnt _unset
+        _then
+            methods.add(method)
+        _endif
+    _endloop
+
+    # Show methods.
+    _for method _over methods.fast_elements()
+    _loop
+        show(method)
+    _endloop
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_method object.p
+    ## Print the object.
+    ## @return {_self} The object itself.
+    # mlint: disable=forbidden-call
+    print(_self)
+    _return _self
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_method object.dp
+    ## Debug print the object.
+    ## @return {_self} The object itself.
+    # mlint: disable=forbidden-call
+    debug_print(_self)
+    _return _self
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_method basic_collection_mixin.ae
+    ## Get an element.
+    ## @return {<E>} The element at the given index.
+    _return _self.an_element()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_global pa <<
+    _proc @pa(obj)
+        _return print_ancestry(obj)
+    _endproc
+$
+
+_pragma(classify_level=basic, topic={rs})
+_global ph <<
+    _proc @ph(obj)
+        _return print_hierarchy(obj)
+    _endproc
+$
+
+_package sw
+
+_pragma(classify_level=restricted, topic={sw_mcp_server})
+_private _method method_finder.read_comment()
+	## Read a comment from input.
+	## @return {sw:char16_vector|sw:unset} Read comment, unset on error.
+	## @return {sw:char16_vector|sw:unset} Method finder error, if any.
+	_local msg << .input.get_line()
+	_local line_count << msg.as_integer()
+	_if line_count _is _unset
+	_then
+		# Ignore errors.
+		_return _unset, msg
+	_endif
+
+	_local comment_lines << rope.new_for(line_count)
+	_over 1.upto(line_count)
+	_loop
+		_local comment_line << .input.get_line()
+		comment_lines.add_last(comment_line)
+	_endloop
+	_return comment_lines.join_as_strings(character.newline), _unset
+_endmethod
+$
+
+_pragma(classify_level=restricted, topic={sw_mcp_server})
+_private _method method_finder.read_line()
+	## Read a single line from input.
+	## @return {sw:char16_vector|sw:unset} Read line.
+	_return .input.get_line()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={sw_mcp_server})
+_method method_finder.get_class_comment(class)
+	## Get class comment.
+	## @param {sw:char16_vector} class Class name, e.g., "sw:rope".
+	## @return {sw:char16_vector|sw:unset} Class comment, unset on error.
+	## @return {sw:char16_vector|sw:unset} Method finder error, if any.
+	_local command << write_string("get_class_info comments ", class)
+	_self.write(command, character.newline)
+	_self.flush()
+	_return _self.read_comment()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={sw_mcp_server})
+_method method_finder.get_method_comment(method, class)
+	## Get method comment.
+	## @param {sw:char16_vector} method Method name, e.g., "as_simple_vector()".
+	## @param {sw:char16_vector} class Class name, e.g., "sw:rope".
+	## @return {sw:char16_vector|sw:unset} Method comment, unset on error.
+	## @return {sw:char16_vector|sw:unset} Method finder error, if any.
+	_local command << write_string("get_method_info comments ", method, " ", class)
+	_self.write(command, character.newline)
+	_self.flush()
+	_return _self.read_comment()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={sw_mcp_server})
+_method method_finder.invoke(object_or_class_name, _optional method_name)
+    ## Invoke a method.
+    ## @param {sw:object|sw:char16_vector|sw:symbol} object_or_class_name Object or class name, e.g., "sw:rope".
+    ## @param {sw:char16_vector|sw:symbol} method_name Method name, e.g., "as_simple_vector()".
+    ## @return {sw:object|sw:unset} The result of the method invocation, unset on error.
+    ## @return {sw:char16_vector|sw:unset} Method finder error, if any.
+    # mlint: disable=warned-call
+    # Find responding class to method.
+    _local obj <<
+        _if object_or_class_name.is_kind_of?(sw:char16_vector) _orif
+            object_or_class_name.is_kind_of?(sw:symbol)
+        _then
+            _local value << get_global_value(object_or_class_name)
+            _if value _is _unset
+            _then
+                write("Class not found: ", object_or_class_name)
+                _return
+            _endif
+            >> value
+        _else
+            >> object_or_class_name
+        _endif
+    _local class_name << obj.class_name
+
+    _if method_name _isnt _unset
+    _then
+        _local method_name_symbol << method_name.as_symbol()
+        _local method << obj.method(method_name_symbol)
+        _if method _is _unset
+        _then
+            write("Method not found: ", method_name, " on class: ", class_name)
+            _return
+        _endif
+
+        # Write method info.
+        write(method)
+
+        # Write method comment.
+        _local owner << method.owner
+        _local owner_name << owner.meta_at(:exemplar)
+        _local doc << _self.get_method_comment(method_name.write_string, owner_name.write_string)
+        _if doc _isnt _unset _andif
+            _not doc.trim_spaces().empty?
+        _then
+            write()
+            write(doc)
+        _endif
+    _else
+        # Write class info.
+        write(obj)
+
+        # Write class comment.
+        _local doc << _self.get_class_comment(class_name.write_string)
+        _if doc _isnt _unset
+        _then
+            write()
+            write(doc)
+        _endif
+    _endif
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_global mf << method_finder
+$
