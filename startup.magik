@@ -127,6 +127,74 @@ _endmethod
 $
 
 _pragma(classify_level=basic, topic={rs})
+_private _method slotted_format_mixin.rs!contents_for_json()
+    ## Get the contents of self for JSON print.
+    ## @return {sw:property_list<K=sw:symbol,E=sw:object>} The slots of the object as a property list.
+    _local props << sw:property_list.new_with( # type: sw:property_list<K=sw:symbol,E=sw:object>
+        :class_name, _self.class_name,
+        :slots, sw:property_list.new())
+    _local slots << props[:slots] # type: sw:property_list<K=sw:symbol,E=sw:object>
+    _for name, value _over _self.sys!slot_names_and_values() # iter-type: sw:symbol,sw:object
+    _loop
+        slots[name] << value.rs!contents_for_json()
+    _endloop
+
+    _return props
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_private _method keys_and_elements_mixin.rs!contents_for_json()
+    ## Get the contents of self for JSON print.
+    ## @return {sw:property_list<K=sw:symbol,E=sw:object>} The slots of the object as a property list.
+    _local props << sw:property_list.new_with( # type: sw:property_list<K=sw:symbol,E=sw:object>
+        :class_name, _self.class_name,
+        :keys_and_elements, sw:property_list.new())
+    _local keys_and_elements << props[:keys_and_elements]
+    _for key, element _over _self.fast_keys_and_elements()
+    _loop
+        keys_and_elements[key] << element.rs!contents_for_json()
+    _endloop
+
+    _return props
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_private _method ro_simple_charindex_mixin.rs!contents_for_json()
+    ## Get the contents of self for JSON print.
+    ## @return {sw:char16_vector} Self as char16_vector.
+    _return _self.as_charvec()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+_private _method enumerated_format_mixin.rs!contents_for_json()
+    ## Get the contents of self for JSON print.
+    ## @return {_self} Self.
+    _return _self
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
+rope_mixin.define_method_target.resolve_conflicts(
+    :|stretchy_indexed_collection_mixin|,
+    {:|rs!contents_for_json()|})
+$
+
+_pragma(classify_level=basic, topic={rs})
+_method object.jpp
+    ## Convert the current object to JSON and pretty print the object.
+    ## @return {_self} The object itself.
+    # mlint: disable=forbidden-call
+    _local props << _self.rs!contents_for_json()
+    _local json_string << sw:json_encoder.new().generate_string(props, _true)
+    write(json_string)
+    _return _self
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
 _method basic_collection_mixin.ae
     ## Get an element.
     ## @return {<E>} The element at the given index.
