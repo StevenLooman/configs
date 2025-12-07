@@ -75,6 +75,38 @@ _endmethod
 $
 
 _pragma(classify_level=basic, topic={rs})
+_method condition.cbap(str)
+    ## Better condition apropos.
+    ## @param {sw:char16_vector|sw:symbol} str The string to match condition names against.
+    # mlint: disable=warned-call
+    _local regex << sw:sw_regexp.new(str)
+
+    # Find matching conditions.
+    _local matching_conditions << sw:sorted_collection.new(_unset, {:method_result, :name})
+    _for cond _over _self.template_map.fast_elements()
+    _loop
+        _local cond_name << cond.name.write_string
+        _if regex.find(cond_name) _isnt _unset
+        _then
+            matching_conditions.add(cond)
+        _endif
+    _endloop
+
+    # Show matching conditions.
+    _for cond _over matching_conditions.fast_elements()
+    _loop
+        write(
+            cond.name, sw:character.tab,
+            "(",
+            "Category: ", cond.category, ", ",
+            "Arguments: ", cond.data_name_list.join_as_strings(", "), ", ",
+            "Taxonomy: ", cond.taxonomy.join_as_strings(", "),
+            ")")
+    _endloop
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={rs})
 _method object.p
     ## Print the object.
     ## @return {_self} The object itself.
