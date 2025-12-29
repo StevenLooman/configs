@@ -106,6 +106,31 @@ _method condition.cbap(str)
 _endmethod
 $
 
+_method sw_module_manager.mbap(str)
+    ## Better module apropos.
+    ## @param {sw:char16_vector|sw:symbol} str The string to match module names against.
+    ## @return {sw:rope<E=sw:module>} The matching modules.
+    # mlint: disable=warned-call
+    _local regex << sw:sw_regexp.new(str)
+
+    _local modules << sw:sorted_collection.new(_unset, {:method_result, :name})
+    _for module _over sw_module_manager.defined_modules.fast_elements()
+    _loop
+        _local module_name << module.name.write_string
+        _if regex.find(module_name) _isnt _unset
+        _then
+            modules.add(module)
+        _endif
+    _endloop
+
+    # Show modules.
+    _for module _over modules.fast_elements()
+    _loop
+        show(module)
+    _endloop
+_endmethod
+$
+
 _pragma(classify_level=basic, topic={rs})
 _method object.p
     ## Print the object.
@@ -187,8 +212,13 @@ _method object.jpp
     ## Convert the current object to JSON and pretty print the object.
     ## @return {_self} The object itself.
     # mlint: disable=forbidden-call
+    _if get_global_value(:sw_json_encoder) _is _unset
+    _then
+        sw:condition.raise(:error, :string, "json module is not loaded")
+    _endif
+
     _local props << _self.rs!contents_for_json()
-    _local json_string << sw:json_encoder.new().generate_string(props, _true)
+    _local json_string << get_global_value(:sw_json_encoder).new().generate_string(props, _true)
     write(json_string)
     _return _self
 _endmethod
@@ -286,8 +316,10 @@ _method method_finder.invoke(object_or_class_name, _optional method_name)
     # mlint: disable=warned-call
     # Find responding class to method.
     _local obj <<
-        _if object_or_class_name.is_kind_of?(sw:char16_vector) _orif
-            object_or_class_name.is_kind_of?(sw:symbol)
+        _if object_or_class_name.is_kind_of?(sw:char16_vector) _andif
+            object_or_class_name _isnt sw:char16_vector _orif
+            object_or_class_name.is_kind_of?(sw:symbol) _orif
+            object_or_class_name _isnt sw:symbol
         _then
             _local value << get_global_value(object_or_class_name)
             _if value _is _unset
